@@ -1,0 +1,18 @@
+# IDEA缓存
+**/.idea
+**/*.iml
+**/target
+
+# VS Code缓存
+**/.vscode
+.DS_Store
+
+# 前端依赖&打包产物
+eams-frontend/node_modules
+eams-frontend/dist
+eams-frontend/package-lock.json
+
+# 日志、临时文件
+*.log
+nohup.out
+*.tmp

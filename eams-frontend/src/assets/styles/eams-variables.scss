@@ -1,0 +1,37 @@
+/* =====================================================
+   EAMS 视觉风格 - SCSS 变量
+   ===================================================== */
+
+// ---- 主色调 ----
+$eams-primary: #2B6CB0;
+$eams-primary-light: #EBF4FF;
+$eams-primary-dark: #1A4A7A;
+
+// ---- 状态色 ----
+$eams-success: #38A169;
+$eams-warning: #DD6B20;
+$eams-danger:  #E53E3E;
+$eams-info:    #718096;
+
+// ---- 圆角 ----
+$eams-radius-base: 6px;
+$eams-radius-small: 4px;
+$eams-radius-round: 20px;
+
+// ---- 间距 ----
+$eams-spacing-xs: 4px;
+$eams-spacing-sm: 8px;
+$eams-spacing-md: 16px;
+$eams-spacing-lg: 24px;
+$eams-spacing-xl: 32px;
+
+// ---- 表格 ----
+$eams-table-header-bg: #F7FAFC;
+$eams-table-border: #E2E8F0;
+$eams-table-row-hover: #EBF4FF;
+
+// ---- 字体 ----
+$eams-font-size-base: 14px;
+$eams-font-size-small: 13px;
+$eams-font-size-large: 16px;
+$eams-input-height: 36px;

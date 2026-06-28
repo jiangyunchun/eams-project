@@ -19,6 +19,31 @@ const routes = [
         component: () => import('@/views/dashboard/Dashboard.vue'),
         meta: { title: '工作台', icon: 'Monitor' },
       },
+      // ---- 领用管理 ----
+      {
+        path: 'requisition/apply',
+        name: 'RequisitionApply',
+        component: () => import('@/views/requisition/ApplyRequisition.vue'),
+        meta: { title: '领用申请', icon: 'Present', perm: 'requisition:apply' },
+      },
+      {
+        path: 'requisition/approval',
+        name: 'RequisitionApproval',
+        component: () => import('@/views/requisition/ApprovalManagement.vue'),
+        meta: { title: '审批管理', icon: 'Present', perm: 'requisition:approve' },
+      },
+      {
+        path: 'requisition/return',
+        name: 'RequisitionReturn',
+        component: () => import('@/views/requisition/ReturnRegistration.vue'),
+        meta: { title: '归还登记', icon: 'Present', perm: 'requisition:return' },
+      },
+      {
+        path: 'requisition/record',
+        name: 'RequisitionRecord',
+        component: () => import('@/views/requisition/RequisitionRecord.vue'),
+        meta: { title: '领用记录', icon: 'Present', perm: 'requisition:record' },
+      },
       // ---- 采购入库 ----
       {
         path: 'procurement/add',

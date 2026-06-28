@@ -26,10 +26,11 @@ const ASSET_MAP = {
   5: { label: '盘点中',type: 'warning' },
 }
 const REQ_MAP = {
-  0: { label: '待审批', type: 'warning' },
-  1: { label: '已通过', type: 'success' },
-  2: { label: '已驳回', type: 'danger' },
-  3: { label: '已归还', type: 'info' },
+  0: { label: '待部门审批', type: 'warning' },
+  1: { label: '待资产管理员审批', type: 'warning' },
+  2: { label: '已通过', type: 'success' },
+  3: { label: '已驳回', type: 'danger' },
+  4: { label: '已归还', type: 'info' },
 }
 const USER_MAP = {
   0: { label: '禁用', type: 'danger' },

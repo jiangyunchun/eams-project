@@ -64,12 +64,13 @@ body {
   border: 1px solid $eams-table-border;
   padding: $eams-spacing-lg;
   margin-bottom: $eams-spacing-md;
-  .el-form-item { margin-bottom: 0; }
+  .el-form-item { margin-bottom: 12px; }
   .search-buttons {
-    display: flex;
-    gap: $eams-spacing-sm;
-    align-items: flex-end;
-    margin-left: auto;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+  }
+  .search-buttons .el-form-item__content {
+    justify-content: flex-end;
   }
 }
 

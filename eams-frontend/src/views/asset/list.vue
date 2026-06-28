@@ -66,6 +66,10 @@
         <el-table-column label="原值(元)" width="110" align="right">
           <template #default="{ row }">{{ formatMoney(row.originalValue) }}</template>
         </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="160" />
+        <el-table-column prop="updateTime" label="修改时间" width="160" />
+        <el-table-column prop="createBy" label="创建人" width="100" />
+        <el-table-column prop="updateBy" label="修改人" width="100" />
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <div class="action-btns">

@@ -19,6 +19,25 @@ const routes = [
         component: () => import('@/views/dashboard/Dashboard.vue'),
         meta: { title: '工作台', icon: 'Monitor' },
       },
+      // ---- 采购入库 ----
+      {
+        path: 'procurement/add',
+        name: 'ProcurementAdd',
+        component: () => import('@/views/procurement/AddProcurement.vue'),
+        meta: { title: '采购登记', icon: 'ShoppingCart', perm: 'procurement:add' },
+      },
+      {
+        path: 'procurement/supplier',
+        name: 'ProcurementSupplier',
+        component: () => import('@/views/procurement/SupplierList.vue'),
+        meta: { title: '供应商管理', icon: 'ShoppingCart', perm: 'procurement:add' },
+      },
+      {
+        path: 'procurement/record',
+        name: 'ProcurementRecord',
+        component: () => import('@/views/procurement/ProcurementRecord.vue'),
+        meta: { title: '采购记录', icon: 'ShoppingCart', perm: 'procurement:add' },
+      },
       // ---- 资产台账 ----
       {
         path: 'asset/list',

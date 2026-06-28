@@ -12,6 +12,7 @@ public class UserQueryDTO {
     private Long deptId;
     private Integer status;
     private String phone;
+    private Long roleId;
     private int pageNum = 1;
     private int pageSize = 10;
 }

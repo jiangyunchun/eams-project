@@ -56,6 +56,16 @@ public class UserService {
         if (StrUtil.isNotBlank(query.getPhone())) {
             wrapper.eq(SysUser::getPhone, query.getPhone());
         }
+        if (query.getRoleId() != null) {
+            List<Long> userIds = userRoleMapper.selectList(
+                    new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId, query.getRoleId()))
+                    .stream().map(SysUserRole::getUserId).collect(Collectors.toList());
+            if (!userIds.isEmpty()) {
+                wrapper.in(SysUser::getId, userIds);
+            } else {
+                wrapper.eq(SysUser::getId, -1L);
+            }
+        }
 
         wrapper.orderByDesc(SysUser::getCreateTime);
 

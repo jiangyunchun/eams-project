@@ -18,6 +18,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="手机号"><el-input v-model="query.phone" placeholder="精确匹配" clearable style="width:160px" /></el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="query.roleId" placeholder="全部" clearable style="width:150px">
+            <el-option v-for="r in roleOptions" :key="r.id" :label="r.roleName" :value="r.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item class="search-buttons">
           <el-button type="primary" @click="fetchData">查询</el-button>
           <el-button @click="resetQuery">重置</el-button>
@@ -149,7 +154,7 @@ const loading = ref(false)
 const submitting = ref(false)
 const roleOptions = ref([])
 
-const query = reactive({ realName: '', deptId: null, status: null, phone: '', pageNum: 1, pageSize: 10 })
+const query = reactive({ realName: '', deptId: null, status: null, phone: '', roleId: null, pageNum: 1, pageSize: 10 })
 
 // ---- 弹窗 ----
 const dialogVisible = ref(false)
@@ -198,7 +203,7 @@ async function fetchData() {
 }
 
 function resetQuery() {
-  query.realName = ''; query.deptId = null; query.status = null; query.phone = ''
+  query.realName = ''; query.deptId = null; query.status = null; query.phone = ''; query.roleId = null
   query.pageNum = 1; fetchData()
 }
 

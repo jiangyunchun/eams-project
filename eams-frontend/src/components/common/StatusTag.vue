@@ -36,6 +36,12 @@ const USER_MAP = {
   0: { label: '禁用', type: 'danger' },
   1: { label: '启用', type: 'success' },
 }
+const TRANSFER_MAP = {
+  0: { label: '待调入确认', type: 'warning' },
+  1: { label: '待资产管理员审批', type: 'warning' },
+  2: { label: '已通过', type: 'success' },
+  3: { label: '已驳回', type: 'danger' },
+}
 const BOOL_MAP = {
   true:  { label: '是', type: 'success' },
   false: { label: '否', type: 'info' },
@@ -44,6 +50,7 @@ const BOOL_MAP = {
 const tag = computed(() => {
   if (props.type === 'asset') return ASSET_MAP[props.value]
   if (props.type === 'requisition') return REQ_MAP[props.value]
+  if (props.type === 'transfer') return TRANSFER_MAP[props.value]
   if (props.type === 'user') return USER_MAP[props.value]
   if (props.type === 'boolean') return BOOL_MAP[String(!!props.value)]
   return { label: String(props.value ?? ''), type: 'info' }

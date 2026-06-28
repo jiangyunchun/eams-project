@@ -19,6 +19,25 @@ const routes = [
         component: () => import('@/views/dashboard/Dashboard.vue'),
         meta: { title: '工作台', icon: 'Monitor' },
       },
+      // ---- 资产调拨 ----
+      {
+        path: 'transfer/apply',
+        name: 'TransferApply',
+        component: () => import('@/views/transfer/ApplyTransfer.vue'),
+        meta: { title: '调拨申请', icon: 'Switch', perm: 'transfer:apply' },
+      },
+      {
+        path: 'transfer/approval',
+        name: 'TransferApproval',
+        component: () => import('@/views/transfer/ApprovalTransfer.vue'),
+        meta: { title: '调拨审批', icon: 'Switch', perm: 'transfer:approve' },
+      },
+      {
+        path: 'transfer/record',
+        name: 'TransferRecord',
+        component: () => import('@/views/transfer/TransferRecord.vue'),
+        meta: { title: '调拨记录', icon: 'Switch', perm: 'transfer:record' },
+      },
       // ---- 领用管理 ----
       {
         path: 'requisition/apply',

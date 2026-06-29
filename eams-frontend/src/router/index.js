@@ -19,6 +19,10 @@ const routes = [
         component: () => import('@/views/dashboard/Dashboard.vue'),
         meta: { title: '工作台', icon: 'Monitor' },
       },
+      // ---- 维保报修 ----
+      { path: 'repair/apply', name: 'RepairApply', component: () => import('@/views/repair/ApplyRepair.vue'), meta: { title: '报修登记', icon: 'Tools', perm: 'repair:apply' } },
+      { path: 'repair/handle', name: 'RepairHandle', component: () => import('@/views/repair/HandleRepair.vue'), meta: { title: '维修处理', icon: 'Tools', perm: 'repair:handle' } },
+      { path: 'repair/record', name: 'RepairRecord', component: () => import('@/views/repair/RepairRecord.vue'), meta: { title: '维保记录', icon: 'Tools', perm: 'repair:record' } },
       // ---- 资产调拨 ----
       {
         path: 'transfer/apply',

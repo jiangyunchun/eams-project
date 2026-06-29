@@ -86,6 +86,31 @@ const routes = [
         component: () => import('@/views/procurement/ProcurementRecord.vue'),
         meta: { title: '采购记录', icon: 'ShoppingCart', perm: 'procurement:add' },
       },
+      // ---- 报废处置 (PRD 6.9) ----
+      {
+        path: 'scrap/apply',
+        name: 'ScrapApply',
+        component: () => import('@/views/scrap/apply.vue'),
+        meta: { title: '报废申请', icon: 'Delete', perm: 'scrap:apply' },
+      },
+      {
+        path: 'scrap/approval',
+        name: 'ScrapApproval',
+        component: () => import('@/views/scrap/approval.vue'),
+        meta: { title: '报废审批', icon: 'Delete', perm: 'scrap:approve' },
+      },
+      {
+        path: 'scrap/disposal',
+        name: 'ScrapDisposal',
+        component: () => import('@/views/scrap/disposal.vue'),
+        meta: { title: '处置登记', icon: 'Delete', perm: 'scrap:disposal' },
+      },
+      {
+        path: 'scrap/record',
+        name: 'ScrapRecord',
+        component: () => import('@/views/scrap/record.vue'),
+        meta: { title: '报废记录', icon: 'Delete', perm: 'scrap:record' },
+      },
       // ---- 资产台账 ----
       {
         path: 'asset/list',

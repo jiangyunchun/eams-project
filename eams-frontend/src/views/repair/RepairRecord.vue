@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="page-header"><h2>维保记录</h2><div class="page-actions"><el-button v-if="has('repair:apply')" type="primary" @click="$router.push('/repair/apply')">报修登记</el-button><el-button v-if="has('repair:record')" @click="exp">导出Excel</el-button></div></div>
+    <div class="page-header"><h2>维保记录</h2><div class="page-actions"><el-button v-if="has('repair:apply')" type="primary" @click="$router.push('/repair/apply')">报修登记</el-button><el-button v-if="has('repair:record')" type="success" @click="exp">导出Excel</el-button></div></div>
     <div class="search-card">
       <el-form :model="q" inline>
         <el-form-item label="报修编号"><el-input v-model="q.repairNo" clearable style="width:180px"/></el-form-item>

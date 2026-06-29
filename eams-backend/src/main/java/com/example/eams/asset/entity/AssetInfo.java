@@ -83,6 +83,10 @@ public class AssetInfo {
     @TableField(exist = false)
     private String userName;
 
+    /** 是否有无法修复的维保报修记录（非数据库字段） */
+    @TableField(exist = false)
+    private Boolean hasUnfixableRepair;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

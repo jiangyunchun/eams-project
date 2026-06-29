@@ -4,7 +4,7 @@
       <h2>调拨记录</h2>
       <div class="page-actions">
         <el-button v-if="hasPerm('transfer:apply')" type="primary" @click="$router.push('/transfer/apply')">调拨申请</el-button>
-        <el-button v-if="hasPerm('transfer:record')" @click="handleExport">导出Excel</el-button>
+        <el-button v-if="hasPerm('transfer:record')" type="success" @click="handleExport">导出Excel</el-button>
       </div>
     </div>
 

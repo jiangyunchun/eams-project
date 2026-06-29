@@ -3,7 +3,7 @@
     <div class="page-header">
       <h2>领用记录</h2>
       <div class="page-actions">
-        <el-button v-if="hasPerm('requisition:record')" @click="handleExport">导出Excel</el-button>
+        <el-button v-if="hasPerm('requisition:record')" type="success" @click="handleExport">导出Excel</el-button>
       </div>
     </div>
 

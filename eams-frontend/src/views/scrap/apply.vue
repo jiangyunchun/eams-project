@@ -70,6 +70,7 @@
                 <div class="c">{{ a.assetCode }}</div>
                 <div class="m">
                   <StatusTag :value="a.status" type="asset" />
+                  <el-tag v-if="a.hasUnfixableRepair" size="small" type="danger" effect="dark">无法维修</el-tag>
                   原值: ¥{{ formatNumber(a.originalValue) }} · {{ a.deptName || '-' }}
                 </div>
               </div>
@@ -93,6 +94,7 @@
           <div style="display:flex;align-items:center;gap:8px;">
             <span>{{ sel?.assetCode }} {{ sel?.assetName }}</span>
             <StatusTag :value="sel?.status" type="asset" />
+            <el-tag v-if="sel?.hasUnfixableRepair" size="small" type="danger" effect="dark">无法维修</el-tag>
             <span style="color:#718096;font-size:13px">
               原值: ¥{{ formatNumber(sel?.originalValue) }}
               <template v-if="sel?.netValue !== undefined"> · 净值: ¥{{ formatNumber(sel?.netValue) }}</template>
@@ -197,7 +199,7 @@ const submitting = ref(false)
 const fileList = ref([])
 
 // 查询条件
-const q = reactive({ assetName: '', assetCode: '', category: '', status: '' })
+const q = reactive({ assetName: '', assetCode: '', category: '', status: 3 })
 
 // 表单
 const form = reactive({
@@ -235,6 +237,12 @@ const filteredAssets = computed(() => {
       ...a,
       isDepreciated: isDepreciated(a),
     }))
+    .sort((a, b) => {
+      // 有"无法维修"维保报修记录的资产靠前显示
+      if (a.hasUnfixableRepair && !b.hasUnfixableRepair) return -1
+      if (!a.hasUnfixableRepair && b.hasUnfixableRepair) return 1
+      return 0
+    })
 })
 
 function selectAsset(a) {
@@ -248,7 +256,10 @@ function selectAsset(a) {
 
 async function loadAssets() {
   try {
-    const params = { ...q, pageNum: 1, pageSize: 200 }
+    // 过滤空值，避免后端 Integer 字段绑定空字符串报错
+    const params = Object.fromEntries(
+      Object.entries({ ...q, pageNum: 1, pageSize: 200 }).filter(([_, v]) => v !== '' && v !== null && v !== undefined)
+    )
     const res = await listAssets(params)
     assets.value = res.data?.list || []
   } catch (e) {
@@ -260,7 +271,7 @@ function resetQ() {
   q.assetName = ''
   q.assetCode = ''
   q.category = ''
-  q.status = ''
+  q.status = 3
   loadAssets()
 }
 

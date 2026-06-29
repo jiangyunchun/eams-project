@@ -182,7 +182,7 @@
           <el-divider content-position="left">附件</el-divider>
           <div v-for="(url, idx) in detail.attachmentUrls.split(',')" :key="idx" style="margin-bottom:4px">
             <el-link type="primary" :href="url" target="_blank">
-              {{ url.split('/').pop() || '附件' + (idx + 1) }}
+              {{ getFileName(url) }}
             </el-link>
           </div>
         </div>
@@ -267,7 +267,6 @@ async function showDetail(row) {
 }
 
 async function handleExport() {
-  // 二次确认
   exporting.value = true
   try {
     const params = { ...q, pageNum: 1, pageSize: 10000 }
@@ -276,28 +275,14 @@ async function handleExport() {
       params.endDate = dateRange.value[1]
     }
     const res = await exportRecords(params)
-    // 处理导出（blob下载）
-    if (res.data) {
-      const list = res.data
-      // 简单导出为CSV
-      const headers = ['报废编号', '资产编码', '资产名称', '报废原因', '状态', '申请人', '申请时间', '处置方式', '处置日期']
-      const rows = list.map(r => [
-        r.scrapNo || '',
-        r.assetCode || '',
-        r.assetName || '',
-        r.scrapReason || '',
-        r.statusLabel || '',
-        r.applicantName || '',
-        r.createTime || '',
-        r.disposalMethod || '',
-        r.disposalDate || '',
-      ])
-      const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n')
-      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })
+    // res 是完整 axios 响应，res.data 是 Blob
+    if (res?.data) {
+      const blob = res.data
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `报废记录_${new Date().toISOString().slice(0, 10)}.csv`
+      const ts = new Date().toISOString().slice(0, 10)
+      a.download = `报废记录_${ts}.xlsx`
       a.click()
       URL.revokeObjectURL(url)
       ElMessage.success('导出成功')
@@ -312,6 +297,16 @@ async function handleExport() {
 function formatNumber(val) {
   if (val == null) return '-'
   return Number(val).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+/** 从上传URL中提取原始文件名（兼容新旧格式） */
+function getFileName(url) {
+  const name = url.substring(url.lastIndexOf('/') + 1)
+  // 新格式: UUID_原始文件名.ext → 提取原始文件名
+  const uuidMatch = name.match(/^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})_(.+)$/i)
+  if (uuidMatch) return uuidMatch[2]
+  // 旧格式: 直接显示文件名
+  return name || '附件'
 }
 
 onMounted(() => {

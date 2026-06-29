@@ -14,6 +14,8 @@ import com.example.eams.asset.mapper.AssetInfoMapper;
 import com.example.eams.common.exception.BusinessException;
 import com.example.eams.common.result.PageResult;
 import com.example.eams.common.util.RedisUtil;
+import com.example.eams.repair.entity.RepairOrder;
+import com.example.eams.repair.mapper.RepairOrderMapper;
 import com.example.eams.system.entity.SysDept;
 import com.example.eams.system.entity.SysDictItem;
 import com.example.eams.system.entity.SysUser;
@@ -48,6 +50,7 @@ public class AssetService {
     private final SysDeptMapper deptMapper;
     private final SysUserMapper userMapper;
     private final SysDictItemMapper dictItemMapper;
+    private final RepairOrderMapper repairOrderMapper;
 
     /** 类别码映射: 字典值 → 编码缩写 */
     private static final Map<String, String> CATEGORY_SHORT = new HashMap<>();
@@ -120,6 +123,9 @@ public class AssetService {
         PageResult<AssetInfo> result = PageResult.of(page);
         fillNames(result.getList());
 
+        // 查询资产是否有"无法修复"的维保报修记录
+        fillUnfixableRepairStatus(result.getList());
+
         return result;
     }
 
@@ -153,6 +159,27 @@ public class AssetService {
                 a.setUserName(userMap.getOrDefault(a.getUserId(), ""));
             }
         });
+    }
+
+    /**
+     * 查询资产是否有"无法修复"的维保报修记录
+     */
+    private void fillUnfixableRepairStatus(List<AssetInfo> list) {
+        if (list.isEmpty()) return;
+        Set<Long> assetIds = list.stream().map(AssetInfo::getId).filter(Objects::nonNull).collect(Collectors.toSet());
+        if (assetIds.isEmpty()) return;
+
+        // 查询这些资产中哪些有 repair_status=3 (无法修复) 的维保报修单
+        List<RepairOrder> unfixableOrders = repairOrderMapper.selectList(
+                new LambdaQueryWrapper<RepairOrder>()
+                        .in(RepairOrder::getAssetId, assetIds)
+                        .eq(RepairOrder::getRepairStatus, 3)
+                        .eq(RepairOrder::getIsDeleted, 0));
+        Set<Long> unfixableAssetIds = unfixableOrders.stream()
+                .map(RepairOrder::getAssetId)
+                .collect(Collectors.toSet());
+
+        list.forEach(a -> a.setHasUnfixableRepair(unfixableAssetIds.contains(a.getId())));
     }
 
     /**

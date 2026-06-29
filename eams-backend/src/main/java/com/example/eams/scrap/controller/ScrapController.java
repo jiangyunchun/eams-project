@@ -3,6 +3,7 @@ package com.example.eams.scrap.controller;
 import com.example.eams.common.config.OperationLog;
 import com.example.eams.common.result.PageResult;
 import com.example.eams.common.result.Result;
+import com.example.eams.common.util.ExcelUtil;
 import com.example.eams.scrap.dto.*;
 import com.example.eams.scrap.entity.ScrapOrder;
 import com.example.eams.scrap.service.ScrapService;
@@ -10,8 +11,13 @@ import com.example.eams.security.annotation.RequireRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 报废处置接口（PRD 6.9）
@@ -148,14 +154,56 @@ public class ScrapController {
      * 导出报废记录 Excel
      * GET /api/scrap/record/export
      * <p>
-     * 按当前筛选条件导出
+     * 按当前筛选条件导出 .xlsx 文件
      * PRD 6.9.4 报废记录导出
      */
     @GetMapping("/record/export")
     @RequireRole({"ROLE_SUPER_ADMIN", "ROLE_ASSET_ADMIN"})
     @OperationLog(module = "报废处置", actionType = "导出", description = "导出报废记录Excel")
-    public Result<List<ScrapOrder>> exportRecords(ScrapQueryDTO query) {
+    public void exportRecords(ScrapQueryDTO query, HttpServletResponse response) {
         List<ScrapOrder> list = scrapService.exportRecords(query);
-        return Result.ok(list);
+
+        LinkedHashMap<String, String> headerAlias = new LinkedHashMap<>();
+        headerAlias.put("scrapNo", "报废编号");
+        headerAlias.put("assetCode", "资产编码");
+        headerAlias.put("assetName", "资产名称");
+        headerAlias.put("category", "资产分类");
+        headerAlias.put("specification", "规格型号");
+        headerAlias.put("deptName", "所属部门");
+        headerAlias.put("originalValue", "原值(元)");
+        headerAlias.put("netValue", "净值(元)");
+        headerAlias.put("scrapReason", "报废原因");
+        headerAlias.put("statusLabel", "报废状态");
+        headerAlias.put("applicantName", "申请人");
+        headerAlias.put("createTime", "申请时间");
+        headerAlias.put("disposalMethod", "处置方式");
+        headerAlias.put("disposalDate", "处置日期");
+
+        DateTimeFormatter dateTimeFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        List<Map<String, Object>> dataList = list.stream().map(o -> {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("scrapNo", o.getScrapNo());
+            m.put("assetCode", o.getAssetCode());
+            m.put("assetName", o.getAssetName());
+            m.put("category", o.getCategory());
+            m.put("specification", o.getSpecification());
+            m.put("deptName", o.getDeptName());
+            m.put("originalValue", o.getOriginalValue() != null
+                    ? o.getOriginalValue().setScale(2, BigDecimal.ROUND_HALF_UP) : null);
+            m.put("netValue", o.getNetValue() != null
+                    ? o.getNetValue().setScale(2, BigDecimal.ROUND_HALF_UP) : null);
+            m.put("scrapReason", o.getScrapReasonLabel() != null ? o.getScrapReasonLabel() : o.getScrapReason());
+            m.put("statusLabel", o.getStatusLabel());
+            m.put("applicantName", o.getApplicantName());
+            m.put("createTime", o.getCreateTime() != null ? o.getCreateTime().format(dateTimeFmt) : "");
+            m.put("disposalMethod", o.getDisposalMethod());
+            m.put("disposalDate", o.getDisposalDate() != null ? o.getDisposalDate().format(dateFmt) : "");
+            return m;
+        }).collect(Collectors.toList());
+
+        String fileName = "报废记录_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        ExcelUtil.export(response, fileName, headerAlias, dataList);
     }
 }

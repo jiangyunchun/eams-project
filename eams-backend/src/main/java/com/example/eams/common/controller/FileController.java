@@ -67,7 +67,9 @@ public class FileController {
             File dir = new File(dirPath);
             if (!dir.exists()) dir.mkdirs();
 
-            String newName = UUID.randomUUID().toString() + ext;
+            // 在文件名中嵌入原始名称（去除特殊字符），便于前端展示原始文件名
+            String safeOriginalName = originalName.replaceAll("[\\\\/:*?\"<>|]", "_");
+            String newName = UUID.randomUUID().toString() + "_" + safeOriginalName;
             String fullPath = dirPath + "/" + newName;
             file.transferTo(new File(fullPath));
 

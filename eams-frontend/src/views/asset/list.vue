@@ -6,7 +6,7 @@
       <div class="page-actions">
         <el-button v-if="hasPerm('asset:add')" type="primary" @click="openAddDialog">新增资产</el-button>
         <el-button v-if="hasPerm('asset:import')" @click="importVisible=true">批量导入</el-button>
-        <el-button v-if="hasPerm('asset:export')" @click="handleExport">导出Excel</el-button>
+        <el-button v-if="hasPerm('asset:export')" type="success" @click="handleExport">导出Excel</el-button>
       </div>
     </div>
 

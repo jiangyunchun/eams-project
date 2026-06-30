@@ -111,6 +111,25 @@ const routes = [
         component: () => import('@/views/scrap/record.vue'),
         meta: { title: '报废记录', icon: 'Delete', perm: 'scrap:record' },
       },
+      // ---- 盘点管理 (PRD 6.4) ----
+      {
+        path: 'inventory/task',
+        name: 'InventoryTask',
+        component: () => import('@/views/inventory/task.vue'),
+        meta: { title: '盘点任务', icon: 'DataAnalysis', perm: 'inventory:task' },
+      },
+      {
+        path: 'inventory/execute/:taskId',
+        name: 'InventoryExecute',
+        component: () => import('@/views/inventory/execute.vue'),
+        meta: { title: '执行盘点', icon: 'DataAnalysis', perm: 'inventory:task' },
+      },
+      {
+        path: 'inventory/difference',
+        name: 'InventoryDifference',
+        component: () => import('@/views/inventory/difference.vue'),
+        meta: { title: '差异记录', icon: 'DataAnalysis', perm: 'inventory:task' },
+      },
       // ---- 资产台账 ----
       {
         path: 'asset/list',
